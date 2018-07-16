@@ -1,0 +1,85 @@
+/*
+CSS for FoxBusters pages
+*/
+
+body {
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  background-color: #E6E6FA;
+  }
+
+ h1 {
+	color: #ffffff;
+	text-shadow: 2px 2px #8a8a5c;
+ }
+ h2 {
+ 	color: #c284e1;
+ }
+
+ 
+#logo {
+	position: relative;
+	top: 10px;
+	display: inline-block;
+	padding: 5px;
+	}
+ 
+ 
+ #sitebranding {
+	display: inline-block;
+	position: relative;
+	top: 0px;
+	padding-top: 0px;
+}
+ 
+ 
+ 
+#bodycontent {
+	/*display: inline-block;*/
+	/*width: 800px;*/
+	margin-left: 40px;
+	/*margin-top: 28px;*/
+	padding-left: 160px;
+}
+
+#nav {
+	display: block;
+	float: left;
+	background: linear-gradient(to bottom, #c284e1, #E6E6FA);
+	width:130px;
+	height: 100%;
+	padding-bottom: 610px;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-top: 23px;
+}
+
+
+#staff {
+	position: relative;
+ 	width: auto;
+ 	height: auto;
+ 	margin: auto;
+}
+
+#IanTaylor {
+	position: absolute;
+	top: -18px;
+	left: 430px;
+	width: 240px;
+	height: 300px;
+}
+
+#ian p, #jane p, #joe p {
+	text-align: center;
+}
+
+#JaneSmith {
+	width: 240px;
+	height: 300px;
+	margin-bottom: 30px;
+}
+
+#JoeBloggs {
+	width: 240px;
+	height: 300px;
+}

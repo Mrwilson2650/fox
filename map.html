@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Foxbusters-Map</title>
+		<meta charset="utf-8"/>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
+		<link href="foxbusters.css" rel="stylesheet" type="text/css"/>
+		<script src="https://unpkg.com/esri-leaflet@2.0.7"></script>
+
+		<style>
+		    body { margin:40; padding:0; }
+		    #map { position: absolute; top:0; bottom:0; right:0; left:0; }
+		</style>
+	</head>
+
+	<body>
+		<div id="header"> <!--START of header div-->
+
+			<div id="logo">
+				<img src="foxlogo.png" width="60" height="50" alt="Foxbusters Logo"/>
+			</div>
+
+			<div id="sitebranding">
+				<h1>Foxbusters</h1>
+			</div>
+		</div> <!--end of header div-->
+
+
+		<div id="nav"><!--start of navigation div-->
+			<ul>
+			<li><a href="home.html">Home</a></li>
+			<li><a href="about.html">About Us</a></li>
+			<li><a href="grants.html">Grants</a></li>
+			<li><a href="map.html">Map</a></li>
+			<li><a href="contactus.html">Contact Us</a></li>
+			</ul>
+		</div> <!--end of navigation div-->
+
+		<div id="bodycontent">
+			<h1>Map of our service region</h1>
+			<p>Below is a map showing the locations where current control of foxes is being undertaken in the Lockhart Shire Council LGA.</p>
+		
+
+		<div id="mapid" style="width: 850px; height: 550px; border: 2px solid navy"></div>
+
+		  <!--Here we have our scripts loaded-->
+		  <script src="foxControl.js"></script>  
+		  <script src="lockhartLGA.js"></script>
+
+		<script>
+
+	    //setting up the map
+
+	      var mymap = L.map('mapid').setView([-35.35, 146.8], 10);
+
+		  var streetview = L.tileLayer(
+	           'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>,',
+	            maxZoom: 18,
+	            }).addTo(mymap);
+
+		  //var image = L.tileLayer(
+		  //      'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServe\
+		  //      r/tile/{z}/{y}/{x}', {
+		  //      attribution: '&copy; <a href="http://www.esri.com/">Esri</a>, '+ 'i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+		  //      maxZoom: 18,
+		  //      }).addTo(mymap);
+
+		  var image = L.esri.tiledMapLayer({
+		  	url: "http://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Imagery/MapServer", }).addTo(mymap);
+
+
+
+	    // adding the custom fox icon as a variable
+	      var foxIcon = L.icon({
+	            iconUrl: 'foxlogo.png',
+	        iconSize: [ 20, 15],
+	        iconAnchor: [0, 0],
+	        popupAnchor: [0, 0]
+	        });
+
+	     //adding custom town marker
+	      var townIcon = L.icon({
+	        iconUrl: 'marker.png',
+	        iconSize: [ 30, 50],
+	        iconAnchor: [0, 40],
+	        popupAnchor: [15, -35]
+	        });
+
+	  //add marker
+	      var marker = L.marker([-35.220965, 146.717618], {icon: townIcon}).addTo(mymap);
+
+	 
+	  //add popups
+	      marker.bindPopup("Lockhart Township");
+
+	  //add on click feature show latlng popup
+	      var popup = L.popup();
+
+	      function onMapClick(e) {
+	        popup
+	        .setLatLng(e.latlng)
+	        .setContent("Current Location: " + e.latlng.toString())
+	        .openOn(mymap);
+	        }
+
+	      mymap.on('click', onMapClick);
+
+	  //insert geojson layers
+	      function info (feature,layer) {
+	      layer.bindPopup("Lockhart LGA");
+	      };
+
+	    var lga = L.geoJson(lockhartLGA, {
+	      onEachFeature: info
+	      }).addTo(mymap);
+
+	    function desc (feature,layer) {
+	       layer.bindPopup(feature.properties.type);
+	      };
+
+	    var foxcontrol = L.geoJson(foxControl, {
+	        onEachFeature: desc,
+	        pointToLayer: function (feature, latlng){
+	          return L.marker(latlng,{icon: foxIcon});
+	        }
+	      }).addTo(mymap);
+
+
+	  //add tilelayers and overlayer for layer control
+	    var baseLayers = {
+	       "Map View": streetview,
+	       "Satellite Imagery": image
+	       };
+
+	    var overlays = {
+	      "Lockhart Township": marker,
+	      "Lockhart LGA": lga,
+	      "Fox Control Sites": foxcontrol
+	      };
+
+	    
+	    L.control.layers(baseLayers, overlays).addTo(mymap);
+	 
+	  </script>
+		  
+		</div>
+	</body>
+</html>
